@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="643.0" prefWidth="965.0" style="-fx-background-color: A1BBD4;" xmlns="http://javafx.com/javafx/16"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pokemonviewer.CategoryViewController">
+  <children>
+    <VBox alignment="TOP_CENTER" layoutX="406.0" layoutY="14.0" prefHeight="200.0" prefWidth="100.0">
+      <children>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+          <children>
+            <Text fx:id="title" fill="#2b72b8" strokeType="OUTSIDE" strokeWidth="0.0" text="Category"
+                  textAlignment="CENTER">
+              <font>
+                <Font name="System Bold" size="36.0"/>
+              </font>
+            </Text>
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+    <VBox fx:id="nameContainer" layoutX="14.0" layoutY="222.0" prefHeight="200.0" prefWidth="100.0"/>
+  </children>
+</Pane>
