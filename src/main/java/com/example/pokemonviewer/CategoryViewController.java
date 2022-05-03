@@ -1,54 +1,149 @@
 package com.example.pokemonviewer;
 
-import com.google.gson.stream.JsonToken;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.*;
 
-public class CategoryViewController implements Initializable {
+public class CategoryViewController {
+  String selectedCategory;
+  List<String> links;
+  int initialPokemon = 15;
   @FXML
   Text title;
   @FXML
-  VBox nameContainer;
+  Text pokemonName;
+  @FXML
+  Label btnBack;
+  @FXML
+  Label btnClose;
+  @FXML
+  ImageView pokemonImage;
+  @FXML
+  VBox pokemonCardWrapper;
+  @FXML
+  Pane infoCard;
+  @FXML
+  ScrollPane sPane;
+  @FXML
+  GridPane pokedexDataContainer;
+  @FXML
+  GridPane baseStatsContainer;
+  @FXML
+  ScrollPane abilitiesWrapper;
+  @FXML
+  VBox pokemonEvolutionsWrapper;
 
+  @Contract("_, _ -> param1")
+  private @NotNull HBox createRow(HBox hbox, @NotNull List<String> links) {
+    new Thread(() ->
+        links.forEach(link -> {
+          try {
+            GridPane pokemonCard = new PokemonCard(link)
+                .onClick(e -> {
+                  PokemonInfoCard.populateCard(link, new HashMap<>() {{
+                    put("name", pokemonName);
+                    put("image", pokemonImage);
+                    put("pokedex_data", pokedexDataContainer);
+                    put("base_stats", baseStatsContainer);
+                    put("abilities", abilitiesWrapper);
+                    put("evolution", pokemonEvolutionsWrapper);
+                  }});
 
-  @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
+                  btnBack.setDisable(true);
+                  title.setDisable(true);
+                  sPane.setDisable(true);
+                  pokemonCardWrapper.setOpacity(.2);
+                  infoCard.setVisible(true);
+                })
+                .onHover()
+                .getCard();
 
-    try {
-      JSONArray pokemonType = Pokemon.specificPokemonType(1);
-      ArrayList<String> urls = new ArrayList<>();
+            hbox.setMinWidth(800);
+            hbox.setAlignment(Pos.CENTER);
+            Platform.runLater(() -> hbox.getChildren().add(pokemonCard));
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        })).start();
+    return hbox;
+  }
 
-      title.setText(Pokemon.selectedCategory());
+  private void createRows(@NotNull List<String> urls) {
+    new Thread(() -> {
 
-      for (int i = 0; i < pokemonType.length(); i++) {
-        JSONObject pokemonList = (JSONObject) pokemonType.getJSONObject(i).get("pokemon");
+      int index = 0;
 
-        urls.add(pokemonList.getString("url"));
+      while (index < urls.size()) {
+        HBox hbox = new HBox(150);
+        List<String> links = urls.subList(index, index + 5);
+
+        Platform.runLater(() ->
+            pokemonCardWrapper.getChildren().addAll(createRow(hbox, links))
+        );
+
+        index += 5;
       }
+    }).start();
+  }
 
-      urls.forEach(_url -> {
-        Text pokemonName = new Text();
+  /**
+   * Displays more rows of Pokémon cards on scroll.
+   */
+  @FXML
+  private void handleScroll() throws IOException {
+    int linkIdx = this.initialPokemon;
+    int start = this.initialPokemon;
+    int end = start + 5;
+    this.links = Pokemon.urls(this.selectedCategory)
+        .subList(linkIdx, Pokemon.urls(this.selectedCategory).size());
 
-        try {
-          pokemonName.setText(Pokemon.getPokemonName(_url));
-          nameContainer.getChildren().addAll(pokemonName);
 
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      });
+    for (int i = this.initialPokemon; i <= this.links.size(); i += 5) {
+      System.out.println(i + " " + (i + 5));
+      start = i;
+    }
 
+//    createRows(this.links.subList(start, end));
+  }
+
+  @FXML
+  private void backToMainMenu() {
+    try {
+      App.setRoot("main-view.fxml");
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  @FXML
+  private void closeInfoCard() {
+    infoCard.setVisible(false);
+    btnBack.setDisable(false);
+    sPane.setDisable(false);
+    pokemonCardWrapper.setOpacity(1);
+  }
+
+  public void initialize() throws IOException {
+    String titleText = String.valueOf(Pokemon.getSelectedCategory().keySet())
+        .replace("[", "").replace("]", "");
+    this.selectedCategory = String.valueOf(Pokemon.getSelectedCategory().values())
+        .replace("[", "").replace("]", "");
+    this.links = Pokemon.urls(this.selectedCategory).subList(0, this.initialPokemon);
+
+    title.setText(titleText);
+    createRows(this.links);
   }
 }

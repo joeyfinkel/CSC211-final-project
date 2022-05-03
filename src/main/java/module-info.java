@@ -7,7 +7,8 @@ module com.example.pokemonviewer {
     requires json;
     requires com.google.gson;
     requires org.apache.commons.io;
+  requires org.jetbrains.annotations;
 
-    opens com.example.pokemonviewer to javafx.fxml;
+  opens com.example.pokemonviewer to javafx.fxml;
     exports com.example.pokemonviewer;
 }
