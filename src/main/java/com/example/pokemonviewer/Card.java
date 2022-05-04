@@ -36,16 +36,16 @@ public class Card {
     return cardInstance;
   }
 
-  private static void setCardStyle(@NotNull GridPane card, double width, double height) {
+  private static void setCardStyle(@NotNull GridPane card, String color, double width, double height) {
     setHalignment(title, HPos.CENTER);
     setValignment(title, VPos.CENTER);
-    card.setStyle("-fx-background: #2B72B8;"
-        + "-fx-background-radius: 30px; "
+    card.setStyle("-fx-background: " + color + ";"
+        + "-fx-background-color: " + color + ";"
+        +"-fx-background-radius: 30px; "
         + "-fx-border-radius: 30px;");
     card.setMinSize(width, height);
     card.setMaxSize(width, height);
     card.setAlignment(Pos.CENTER);
-    card.setTranslateZ(5);
   }
 
   /**
@@ -75,7 +75,7 @@ public class Card {
     ImageView image = new ImageView(Pokemon.getPicture(url));
     title = cardTitle(Pokemon.getName(url), 24);
 
-    setCardStyle(card, width, height);
+    setCardStyle(card, "#2B72B8", width, height);
     card.add(title, 0, 0);
     card.add(image, 0, 1);
 
@@ -88,12 +88,12 @@ public class Card {
    * @param url The url of the specific Pokémon.
    * @return A Pokémon card with the name and image.
    */
-  public GridPane create(String url, int fontSize, double width, double height) throws IOException {
+  public GridPane create(String url, int fontSize, String color, double width, double height) throws IOException {
     GridPane card = new GridPane();
     ImageView image = new ImageView(Pokemon.getPicture(url));
     title = cardTitle(Pokemon.getName(url), fontSize);
 
-    setCardStyle(card, width, height);
+    setCardStyle(card, color, width, height);
     card.add(title, 0, 0);
     card.add(image, 0, 1);
 

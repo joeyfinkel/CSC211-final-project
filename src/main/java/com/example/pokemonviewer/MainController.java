@@ -20,9 +20,8 @@ public class MainController implements Initializable {
   /**
    * Populates the dropdown with all the Pokémon categories.
    *
-   * @param pokemon The reference to the Pokémon object.
    */
-  private void initializeDropDown(Pokemon pokemon) throws IOException {
+  private void initializeDropDown() throws IOException {
     this.pokemonTypes = Pokemon.getTypes();
 
     comboBox.setValue("Categories");
@@ -58,7 +57,7 @@ public class MainController implements Initializable {
     comboBox.setOnMouseEntered(e -> comboBox.setCursor(Cursor.HAND));
 
     try {
-      initializeDropDown(Pokemon.getInstance());
+      initializeDropDown();
     } catch (IOException e) {
       e.printStackTrace();
     }

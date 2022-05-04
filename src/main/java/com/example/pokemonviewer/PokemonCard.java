@@ -17,9 +17,8 @@ public final class PokemonCard {
     Pokemon.setId(pokemonId(url));
   }
 
-  public PokemonCard(String url, int fontSize, double width, double height) throws IOException {
-    this.card = Card.getInstance().create(url, fontSize, width, height);
-    System.out.println(url);
+  public PokemonCard(String url, int fontSize, String color, double width, double height) throws IOException {
+    this.card = Card.getInstance().create(url, fontSize, color, width, height);
     Pokemon.setId(pokemonId(url));
   }
 

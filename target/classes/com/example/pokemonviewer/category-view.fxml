@@ -7,175 +7,149 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: A1BBD4;" xmlns="http://javafx.com/javafx/16"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pokemonviewer.CategoryViewController">
+<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: A1BBD4;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pokemonviewer.CategoryViewController">
   <children>
-    <GridPane layoutX="58.0" layoutY="14.0" prefHeight="50.0" prefWidth="739.0">
+    <GridPane fx:id="menuWrapper" layoutX="50.0" layoutY="14.0" prefHeight="80.0" prefWidth="700.0">
       <columnConstraints>
-        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="293.0" minWidth="0.0" prefWidth="51.0"/>
-        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="711.0" minWidth="10.0" prefWidth="642.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.0" minWidth="0.0" prefWidth="52.0"/>
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="293.0" minWidth="0.0" prefWidth="51.0" />
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="711.0" minWidth="10.0" prefWidth="642.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.0" minWidth="0.0" prefWidth="52.0" />
       </columnConstraints>
       <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
       </rowConstraints>
       <children>
-        <Label fx:id="btnBack" alignment="CENTER" onMouseClicked="#backToMainMenu" prefHeight="42.0" prefWidth="34.0"
-               text="↩" textAlignment="CENTER" textFill="#2b72b8">
+        <Label fx:id="btnBack" alignment="CENTER" onMouseClicked="#backToMainMenu" prefHeight="42.0" prefWidth="34.0" text="↩" textAlignment="CENTER" textFill="#2b72b8">
           <font>
-            <Font name="System Bold" size="67.0"/>
+            <Font name="System Bold" size="67.0" />
           </font>
           <cursor>
-            <Cursor fx:constant="HAND"/>
+            <Cursor fx:constant="HAND" />
           </cursor>
         </Label>
-        <Text fx:id="title" fill="#2b72b8" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" textAlignment="CENTER"
-              GridPane.columnIndex="1">
+        <Text fx:id="title" fill="#2b72b8" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" textAlignment="CENTER" GridPane.columnIndex="1">
           <font>
-            <Font name="System Bold" size="36.0"/>
+            <Font name="System Bold" size="36.0" />
           </font>
         </Text>
       </children>
     </GridPane>
-    <ScrollPane fx:id="sPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutY="114.0"
-                onScroll="#handleScroll" prefHeight="484.0" prefWidth="800.0"
-                style="-fx-background: A1BBD4; -fx-border-color: A1BBD4;" vbarPolicy="ALWAYS">
+    <ScrollPane fx:id="sPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutY="114.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onScroll="#handleScroll" prefHeight="485.0" prefWidth="800.0" style="-fx-background: A1BBD4; -fx-border-color: A1BBD4;" vbarPolicy="ALWAYS" vmax="1.2">
       <content>
-        <VBox fx:id="pokemonCardWrapper" alignment="CENTER" prefHeight="267.0" prefWidth="427.0" spacing="175.0">
+        <VBox fx:id="pokemonCardWrapper" alignment="CENTER" prefHeight="718.0" prefWidth="824.0" spacing="175.0">
           <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
           </padding>
         </VBox>
       </content>
     </ScrollPane>
-    <Pane fx:id="infoCard" layoutX="50.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity"
-          minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="700.0"
-          style="-fx-background-color: #2B72B8; -fx-background-radius: 30px; -fx-border-radius: 30px;" visible="false">
+    <Pane fx:id="infoCard" layoutX="50.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="700.0" style="-fx-background-color: #2B72B8; -fx-background-radius: 30px; -fx-border-radius: 30px;" visible="false">
       <children>
-        <GridPane layoutX="25.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                  minWidth="-Infinity" prefHeight="62.0" prefWidth="663.0">
+        <GridPane layoutX="25.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="62.0" prefWidth="663.0">
           <columnConstraints>
-            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="279.0" minWidth="0.0" prefWidth="117.0"/>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="559.0" minWidth="10.0"
-                               prefWidth="432.0"/>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="559.0" minWidth="10.0"
-                               prefWidth="117.0"/>
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="279.0" minWidth="0.0" prefWidth="117.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="559.0" minWidth="10.0" prefWidth="432.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="559.0" minWidth="10.0" prefWidth="117.0" />
           </columnConstraints>
           <rowConstraints>
-            <RowConstraints maxHeight="129.0" minHeight="0.0" prefHeight="73.0" valignment="CENTER" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="129.0" minHeight="0.0" prefHeight="73.0" valignment="CENTER" vgrow="SOMETIMES" />
           </rowConstraints>
           <children>
             <Label fx:id="btnClose" mnemonicParsing="false" onMouseClicked="#closeInfoCard" text="✕" textFill="#feca05">
               <font>
-                <Font name="System Bold" size="24.0"/>
+                <Font name="System Bold" size="24.0" />
               </font>
               <cursor>
-                <Cursor fx:constant="HAND"/>
+                <Cursor fx:constant="HAND" />
               </cursor>
             </Label>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1">
               <children>
-                <Text fx:id="pokemonName" fill="#feca05" strokeType="OUTSIDE" strokeWidth="0.0" text="Pokemon name"
-                      textAlignment="CENTER">
+                <Text fx:id="pokemonName" fill="#feca05" strokeType="OUTSIDE" strokeWidth="0.0" text="Pokemon name" textAlignment="CENTER">
                   <font>
-                    <Font name="System Bold" size="28.0"/>
+                    <Font name="System Bold" size="30.0" />
                   </font>
                 </Text>
-                <ImageView fx:id="pokemonImage" fitHeight="61.0" fitWidth="70.0" pickOnBounds="true"
-                           preserveRatio="true">
+                <ImageView fx:id="pokemonImage" fitHeight="61.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                   <viewport>
-                    <Rectangle2D/>
+                    <Rectangle2D />
                   </viewport>
                 </ImageView>
               </children>
             </HBox>
           </children>
         </GridPane>
-        <Pane layoutX="25.0" layoutY="82.0" prefHeight="334.0" prefWidth="550.0"
-              style="-fx-background-color: transparent;">
+        <Pane layoutX="25.0" layoutY="82.0" prefHeight="334.0" prefWidth="663.0" style="-fx-background-color: transparent;">
           <children>
-            <GridPane hgap="20.0" prefHeight="325.0" prefWidth="550.0" vgap="5.0">
+            <GridPane hgap="20.0" prefHeight="325.0" prefWidth="663.0" vgap="5.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" prefWidth="224.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="340.0" minWidth="10.0" prefWidth="316.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="301.0" minWidth="10.0" prefWidth="188.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="468.0" minWidth="10.0" prefWidth="417.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints maxHeight="156.0" minHeight="10.0" prefHeight="147.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="179.0" minHeight="10.0" prefHeight="175.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="156.0" minHeight="10.0" prefHeight="147.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="179.0" minHeight="10.0" prefHeight="175.0" vgrow="SOMETIMES" />
               </rowConstraints>
               <children>
                 <VBox prefHeight="144.0" prefWidth="177.0" style="-fx-background-color: transparent;">
                   <children>
-                    <Text fill="#feca05" strokeType="OUTSIDE" strokeWidth="0.0" text="Pokedex Data"
-                          wrappingWidth="138.13671875">
+                    <Text fill="#feca05" strokeType="OUTSIDE" strokeWidth="0.0" text="Pokedex Data" wrappingWidth="138.13671875">
                       <font>
-                        <Font name="System Bold" size="15.0"/>
+                        <Font name="System Bold" size="18.0" />
                       </font>
                     </Text>
                     <GridPane fx:id="pokedexDataContainer">
                       <columnConstraints>
-                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       </columnConstraints>
                       <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       </rowConstraints>
                       <children>
                       </children>
                     </GridPane>
                   </children>
                 </VBox>
-                <VBox prefHeight="144.0" prefWidth="177.0" style="-fx-background-color: transparent;"
-                      GridPane.rowIndex="1">
+                <VBox prefHeight="144.0" prefWidth="177.0" style="-fx-background-color: transparent;" GridPane.rowIndex="1">
                   <children>
-                    <Text fill="#feca05" strokeType="OUTSIDE" strokeWidth="0.0" text="Base Stats"
-                          wrappingWidth="138.13671875">
+                    <Text fill="#feca05" strokeType="OUTSIDE" strokeWidth="0.0" text="Base Stats" wrappingWidth="138.13671875">
                       <font>
-                        <Font name="System Bold" size="15.0"/>
+                        <Font name="System Bold" size="18.0" />
                       </font>
                     </Text>
                     <GridPane fx:id="baseStatsContainer">
                       <columnConstraints>
-                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       </columnConstraints>
                       <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       </rowConstraints>
                       <children>
                       </children>
                     </GridPane>
                   </children>
                 </VBox>
-                <VBox layoutX="10.0" layoutY="171.0" prefHeight="146.0" prefWidth="730.0" spacing="5.0"
-                      style="-fx-background-color: transparent;" GridPane.columnIndex="1">
+                <VBox layoutX="10.0" layoutY="171.0" prefHeight="146.0" prefWidth="730.0" spacing="5.0" style="-fx-background-color: transparent;" GridPane.columnIndex="1">
                   <children>
-                    <Text fill="#feca05" strokeType="OUTSIDE" strokeWidth="0.0" text="Abilities"
-                          wrappingWidth="138.13671875">
+                    <Text fill="#feca05" strokeType="OUTSIDE" strokeWidth="0.0" text="Abilities" wrappingWidth="138.13671875">
                       <font>
-                        <Font name="System Bold" size="15.0"/>
+                        <Font name="System Bold" size="18.0" />
                       </font>
                     </Text>
-                    <ScrollPane fx:id="abilitiesWrapper" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0"
-                                style="-fx-background: #2B72B8; -fx-border-color: #2B72B8; -fx-background-color: transparent;">
-                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0"/>
-                      </content>
-                    </ScrollPane>
+                    <ScrollPane fx:id="abilitiesWrapper" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" style="-fx-background: #2B72B8; -fx-border-color: #2B72B8; -fx-background-color: transparent;" />
                   </children>
                 </VBox>
-                <VBox fx:id="pokemonEvolutionsWrapper" layoutX="220.0" layoutY="10.0" prefHeight="144.0"
-                      prefWidth="177.0" spacing="2.5" style="-fx-background-color: transparent;"
-                      GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <VBox fx:id="pokemonEvolutionsWrapper" layoutX="220.0" layoutY="10.0" prefHeight="144.0" prefWidth="177.0" spacing="20.0" style="-fx-background-color: transparent;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                   <children>
                   </children>
                 </VBox>
@@ -185,7 +159,7 @@
         </Pane>
       </children>
       <padding>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
       </padding>
     </Pane>
   </children>

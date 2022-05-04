@@ -6,10 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class Pokemon {
   public static String id;
@@ -67,7 +64,7 @@ public class Pokemon {
       String name = (String) types.getJSONObject(i).get("name");
       String url = (String) types.getJSONObject(i).get("url");
 
-      categories.put(Helpers.capitalizeFirstLetter(name), url);
+      categories.put(Helpers.capitalizeWord(name), url);
     }
 
     return categories;
@@ -113,7 +110,7 @@ public class Pokemon {
    * @throws IOException
    */
   public static @NotNull String getName(String url) throws IOException {
-    return Helpers.capitalizeFirstLetter(API.queryURL(url).getString("name"));
+    return Helpers.capitalizeWord(API.queryURL(url).getString("name"));
   }
 
   public static String getSpeciesUrl(String url) throws IOException {
@@ -126,11 +123,7 @@ public class Pokemon {
     return evolutionChain.getString("url");
   }
 
-  private static JSONArray evolutionArray(@NotNull JSONObject obj, String url) {
-    return obj.getJSONArray("evolves_to");
-  }
-
-  public static ArrayList<JSONObject> getNextEvolution(@NotNull JSONObject obj) {
+  public static @NotNull ArrayList<JSONObject> getNextEvolution(@NotNull JSONObject obj) {
     JSONArray evolvesTo = obj.getJSONArray("evolves_to");
     ArrayList<JSONObject> evolutions = new ArrayList<>();
 
@@ -165,13 +158,12 @@ public class Pokemon {
   public static @NotNull ArrayList<String> getEvolutionNames(String url, String currName) throws IOException {
     ArrayList<String> evolutions = evolvesTo(url);
 
-    evolutions.add(0,currName);
-    return  evolutions;
+    evolutions.add(0, currName);
+    return evolutions;
   }
 
   public static String getPicture(String url) throws IOException {
     JSONObject images = (JSONObject) API.queryURL(url).get("sprites");
-//    if (!url.equals("front_default")) return "Image not found";
     return images.getString("front_default");
   }
 
@@ -180,7 +172,7 @@ public class Pokemon {
     return new HashMap<>() {
       {
         put("number", API.queryURL(link).get("id").toString());
-        put("type", Helpers.capitalizeFirstLetter(API.queryURL(String.valueOf(getSelectedCategory().values())
+        put("type", Helpers.capitalizeWord(API.queryURL(String.valueOf(getSelectedCategory().values())
             .replace("[", "").replace("]", "")).get("name").toString()));
         put("height", API.queryURL(link).get("height").toString());
         put("weight", API.queryURL(link).get("weight").toString());
@@ -196,35 +188,64 @@ public class Pokemon {
         for (int i = 0; i < baseStatObj.length(); i++) {
           JSONObject statObj = (JSONObject) baseStatObj.get(i);
           JSONObject statNameObj = (JSONObject) statObj.get("stat");
+          String stat = statNameObj.get("name").toString();
 
-          put(statNameObj.get("name").toString(), statObj.get("base_stat").toString());
+          if (stat.contains("-")) {
+            String first = stat.substring(0, stat.indexOf("-"));
+            String second = stat.substring(stat.indexOf("-") + 1);
+
+            put(Helpers.capitalizeWords(new String[]{first, second}), statObj.get("base_stat").toString());
+          } else if (stat.equalsIgnoreCase("hp")) {
+            put(stat.toUpperCase(), statObj.get("base_stat").toString());
+          } else put(stat, statObj.get("base_stat").toString());
+
         }
       }
     };
   }
 
-  public static @NotNull HashMap<String, String> getAbilities(String link) throws IOException {
-    JSONArray abilitiesObj = API.queryURL(link).getJSONArray("abilities");
+  private static @NotNull HashMap<String, String> getAbilitiesObj(String url) throws IOException {
+    JSONArray abilitiesObj = API.queryURL(url).getJSONArray("abilities");
 
     return new HashMap<>() {
       {
         for (int i = 0; i < abilitiesObj.length(); i++) {
-          JSONObject statObj = (JSONObject) abilitiesObj.get(i);
-          JSONObject statNameObj = (JSONObject) statObj.get("ability");
-          String abilityName = statNameObj.get("name").toString();
-          String abilityUrl = statNameObj.get("url").toString();
-          JSONArray abilityFlavors = API.queryURL(abilityUrl).getJSONArray("flavor_text_entries");
-          String abilityDescription = abilityFlavors.getJSONObject(0).get("flavor_text").toString();
+          JSONObject entry = abilitiesObj.getJSONObject(i).getJSONObject("ability");
+          String abilityName = entry.get("name").toString();
+          String abilityUrl = entry.get("url").toString();
 
-          put(abilityName, abilityDescription);
+          put(abilityName, abilityUrl);
         }
       }
     };
   }
 
-  public static @NotNull String getSelectedCategory(String id) throws IOException {
-    return Helpers.capitalizeFirstLetter(API.queryURL(String.valueOf(getSelectedCategory().values())
-        .replace("[", "").replace("]", "")).get("name").toString());
-  }
+  public static @NotNull HashMap<String, String> getAbilities(String url) throws IOException {
+    return new HashMap<>() {{
+      getAbilitiesObj(url).forEach((key, value) -> {
+        try {
+          JSONArray flavors = API.queryURL(value).getJSONArray("flavor_text_entries");
 
+          for (int i = 0; i < flavors.length(); i++) {
+            JSONObject flavorObj = flavors.getJSONObject(i);
+            JSONObject languageObj = flavorObj.getJSONObject("language");
+            String language = languageObj.getString("name");
+            String flavorText = flavorObj.getString("flavor_text");
+
+            if (language.equals("en")) {
+              if (key.contains("-")) {
+                String first = key.substring(0, key.indexOf("-"));
+                String second = key.substring(key.indexOf("-") + 1);
+
+                put(Helpers.capitalizeWords(new String[]{first, second}), flavorText);
+              } else
+                put(Helpers.capitalizeWord(key), flavorText);
+            }
+          }
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      });
+    }};
+  }
 }

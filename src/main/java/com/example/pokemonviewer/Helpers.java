@@ -1,22 +1,24 @@
 package com.example.pokemonviewer;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public final class Helpers {
 
   private Helpers() {
   }
 
-  public static String capitalizeFirstLetter(String word) {
+  public static @NotNull String capitalizeWord(@NotNull String word) {
     return word.substring(0, 1).toUpperCase() + word.substring(1);
   }
 
-  public static String prettyPrintJSON(String json) {
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+  @Contract(pure = true)
+  public static @NotNull String capitalizeWords(String @NotNull [] words) {
+    String returnVal = "";
 
-    return gson.toJson(JsonParser.parseString(json));
+    for (String word : words)
+      returnVal += capitalizeWord(word) + " ";
+
+    return returnVal.trim();
   }
 }
