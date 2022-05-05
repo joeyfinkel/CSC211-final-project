@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 public class CategoryViewController {
@@ -51,37 +52,51 @@ public class CategoryViewController {
   @FXML
   VBox pokemonEvolutionsWrapper;
 
+  /**
+   * Creates a row of Pokémon cards.
+   *
+   * @param row   The {@link HBox} that represents a row.
+   * @param links A list of Pokémon links. Each row will be created with these links.
+   * @return A row of Pokémon cards.
+   */
   @Contract("_, _ -> param1")
-  private @NotNull HBox createRow(HBox hbox, @NotNull List<String> links) {
+  private @NotNull HBox createRow(HBox row, @NotNull List<String> links) {
+    // Create a new thread to speed help with loading in the cards.
     new Thread(() -> links.forEach(link -> {
       try {
         GridPane pokemonCard = new PokemonCard(link).onClick(e -> {
-          PokemonInfoCard.setInfo(new HashMap<>());
-          PokemonInfoCard.populateCard(link, new HashMap<>() {{
+          HashMap<String, Object> cardInfo = new HashMap<>() {{
             put("name", pokemonName);
             put("image", pokemonImage);
             put("pokedex_data", pokedexDataContainer);
             put("base_stats", baseStatsContainer);
             put("abilities", abilitiesWrapper);
             put("evolution", pokemonEvolutionsWrapper);
-          }});
+          }};
+
+          PokemonInfoCard.populateCard(link, cardInfo);
 
           menuWrapper.setDisable(true);
           sPane.setDisable(true);
-          pokemonCardWrapper.setOpacity(.2);
+          pokemonCardWrapper.setDisable(true);
           infoCard.setVisible(true);
         }).onHover().getCard();
 
-        hbox.setMinWidth(800);
-        hbox.setAlignment(Pos.CENTER);
-        Platform.runLater(() -> hbox.getChildren().add(pokemonCard));
+        row.setMinWidth(800);
+        row.setAlignment(Pos.CENTER);
+        Platform.runLater(() -> row.getChildren().add(pokemonCard));
       } catch (IOException e) {
         e.printStackTrace();
       }
     })).start();
-    return hbox;
+    return row;
   }
 
+  /**
+   * Creates multiple rows of Pokémon cards that are displayed on the GUI.
+   *
+   * @param urls A list of Pokémon links. Each row will be created with these links.
+   */
   private void createRows(@NotNull List<String> urls) {
     new Thread(() -> {
       int index = 0;
@@ -107,15 +122,19 @@ public class CategoryViewController {
     this.links = Pokemon.urls(this.selectedCategory).subList(linkIdx, Pokemon.urls(this.selectedCategory).size());
 
     // Only trigger when scrolling down
-    if(sPane.getVvalue() == 1.2) {
+    if (sPane.getVvalue() == 1.2) {
       while (idx < this.links.size() / 3) {
         if (((this.links.size() / 3) == pokemonCardWrapper.getChildren().size())
-            || idx > this.links.size()) return;
+                || idx > this.links.size()) return;
         createRows(this.links.subList(idx, idx += 5));
       }
     }
   }
 
+  /**
+   * The event handler for the back button.
+   * Once clicked, you will be returned to the main menu.
+   */
   @FXML
   private void backToMainMenu() {
     try {
@@ -125,6 +144,10 @@ public class CategoryViewController {
     }
   }
 
+  /**
+   * The event handler for the X button on the info card.
+   * Once clicked, the info card will be closed.
+   */
   @FXML
   private void closeInfoCard() {
     infoCard.setVisible(false);

@@ -21,7 +21,7 @@
       <children>
         <Label fx:id="btnBack" alignment="CENTER" onMouseClicked="#backToMainMenu" prefHeight="42.0" prefWidth="34.0" text="↩" textAlignment="CENTER" textFill="#2b72b8">
           <font>
-            <Font name="System Bold" size="67.0" />
+            <Font name="System Bold" size="37.0" />
           </font>
           <cursor>
             <Cursor fx:constant="HAND" />

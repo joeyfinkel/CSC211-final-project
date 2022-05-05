@@ -19,7 +19,6 @@ public class MainController implements Initializable {
 
   /**
    * Populates the dropdown with all the Pokémon categories.
-   *
    */
   private void initializeDropDown() throws IOException {
     this.pokemonTypes = Pokemon.getTypes();
@@ -36,12 +35,13 @@ public class MainController implements Initializable {
     comboBox.getSelectionModel().selectedIndexProperty().addListener((selectedItem) -> {
       try {
         ReadOnlyIntegerProperty categoryIdx = (ReadOnlyIntegerProperty) selectedItem;
-        var types = this.pokemonTypes.keySet().toArray();
+        Object[] types = this.pokemonTypes.keySet().toArray();
 
+        // Assigns the selected category.
         Pokemon.setSelectedCategory(new HashMap<>() {
           {
             put((String) types[categoryIdx.getValue()],
-                pokemonTypes.get((String) types[categoryIdx.getValue()]));
+                    pokemonTypes.get((String) types[categoryIdx.getValue()]));
           }
         });
 

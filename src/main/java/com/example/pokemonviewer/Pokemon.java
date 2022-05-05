@@ -10,10 +10,7 @@ import java.util.*;
 
 public class Pokemon {
   public static String id;
-  public static String selectedCategoryUrl;
   public static HashMap<String, String> selectedCategory;
-
-  private final static Pokemon instance = new Pokemon();
 
   public static String getId() {
     return id;
@@ -21,14 +18,6 @@ public class Pokemon {
 
   public static void setId(String id) {
     Pokemon.id = id;
-  }
-
-  public static String getSelectedCategoryUrl() {
-    return selectedCategoryUrl;
-  }
-
-  public void setSelectedCategoryUrl(String url) {
-    Pokemon.selectedCategoryUrl = url;
   }
 
   public static HashMap<String, String> getSelectedCategory() {
@@ -39,22 +28,22 @@ public class Pokemon {
     Pokemon.selectedCategory = selectedCategory;
   }
 
-  public static Pokemon getInstance() {
-    return instance;
-  }
-
-  public static @NotNull String pokemonId(@NotNull String url) {
+  /**
+   * Gets the id of the Pokémon.
+   *
+   * @param url The url of the Pokémon to get the id for.
+   * @return The id of the Pokémon.
+   */
+  public static @NotNull String getId(@NotNull String url) {
     String endBaseLink = url.substring(API.BASE_URL.length(), url.length() - 1);
-    String id = endBaseLink.replace("pokemon/", "");
 
-    return id;
+    return endBaseLink.replace("pokemon/", "");
   }
 
   /**
    * Queries the API to get all the Pokémon categories.
    *
    * @return An array with all the Pokémon categories.
-   * @throws IOException
    */
   public static @NotNull LinkedHashMap<String, String> getTypes() throws IOException {
     LinkedHashMap<String, String> categories = new LinkedHashMap<>();
@@ -113,18 +102,36 @@ public class Pokemon {
     return Helpers.capitalizeWord(API.queryURL(url).getString("name"));
   }
 
-  public static String getSpeciesUrl(String url) throws IOException {
+  /**
+   * Gets the species url of the specified Pokémon.
+   *
+   * @param url The url of the Pokémon.
+   * @return The species url of the specified Pokémon.
+   */
+  private static String getSpeciesUrl(String url) throws IOException {
     JSONObject speciesObj = API.queryURL(url).getJSONObject("species");
     return speciesObj.getString("url");
   }
 
-  public static String getEvolutionChainUrl(String url) throws IOException {
-    JSONObject evolutionChain = API.queryURL(url).getJSONObject("evolution_chain");
+  /**
+   * Gets the evolution chain url of the specified Pokémon.
+   * @param url The url of the Pokémon.
+   * @return The evolution chain url of the Pokémon.
+   * @throws IOException
+   */
+  private static String getEvolutionChainUrl(String url) throws IOException {
+    JSONObject evolutionChain = API.queryURL(getSpeciesUrl(url)).getJSONObject("evolution_chain");
     return evolutionChain.getString("url");
   }
 
-  public static @NotNull ArrayList<JSONObject> getNextEvolution(@NotNull JSONObject obj) {
-    JSONArray evolvesTo = obj.getJSONArray("evolves_to");
+  /**
+   * Gets the next evolution of the Pokémon.
+   * @param url The url of the Pokémon to get the next evolution for.
+   * @return A list of evolutions for the Pokémon.
+   */
+  private static @NotNull ArrayList<JSONObject> getNextEvolution(String url) throws IOException {
+    JSONObject chain = API.queryURL(getEvolutionChainUrl(url)).getJSONObject("chain");
+    JSONArray evolvesTo = chain.getJSONArray("evolves_to");
     ArrayList<JSONObject> evolutions = new ArrayList<>();
 
     for (int i = 0; i < evolvesTo.length(); i++) {
@@ -133,9 +140,14 @@ public class Pokemon {
     return evolutions;
   }
 
-  public static @NotNull ArrayList<String> evolvesTo(String evolutionUrl) throws IOException {
-    JSONObject chain = API.queryURL(evolutionUrl).getJSONObject("chain");
-    ArrayList<JSONObject> evolvesToObj = getNextEvolution(chain);
+  /**
+   * This method gets the Pokémon the current Pokémon will evolve to.
+   * @param url The url of the Pokémon to get the evolution for.
+   * @return A list of Pokémon evolutions.
+   * @throws IOException
+   */
+  private static @NotNull ArrayList<String> evolvesTo(String url) throws IOException {
+    ArrayList<JSONObject> evolvesToObj = getNextEvolution(url);
     ArrayList<String> evolutions = new ArrayList<>();
 
     evolvesToObj.forEach(element -> {
@@ -149,12 +161,18 @@ public class Pokemon {
         String nextEvolutionName = nextEvolutionObj.getJSONObject("species").getString("name");
         evolutions.add(nextEvolutionName);
       }
-
     });
 
     return evolutions;
   }
 
+  /**
+   * Gets the names of the evolutions of the current Pokémon.
+   * @param url The url of the Pokémon to get the evolutions for.
+   * @param currName The name of the selected Pokémon.
+   * @return A list of the evolution names of the current Pokémon.
+   * @throws IOException
+   */
   public static @NotNull ArrayList<String> getEvolutionNames(String url, String currName) throws IOException {
     ArrayList<String> evolutions = evolvesTo(url);
 
@@ -162,24 +180,42 @@ public class Pokemon {
     return evolutions;
   }
 
+  /**
+   * Gets the picture of the Pokémon.
+   * @param url The url of the Pokémon to get the picture for.
+   * @return The link for the default picture of the Pokémon.
+   * @throws IOException
+   */
   public static String getPicture(String url) throws IOException {
     JSONObject images = (JSONObject) API.queryURL(url).get("sprites");
     return images.getString("front_default");
   }
 
+  /**
+   * Gets basic Pokédex data of a Pokémon.
+   * @param link The link of the Pokémon to get the data for.
+   * @return A map of the Pokédex data containing the id, height, weight, and type of the Pokémon.
+   * @throws IOException
+   */
   @Contract("_ -> new")
   public static @NotNull HashMap<String, String> getPokedexData(String link) throws IOException {
     return new HashMap<>() {
       {
         put("number", API.queryURL(link).get("id").toString());
         put("type", Helpers.capitalizeWord(API.queryURL(String.valueOf(getSelectedCategory().values())
-            .replace("[", "").replace("]", "")).get("name").toString()));
+                .replace("[", "").replace("]", "")).get("name").toString()));
         put("height", API.queryURL(link).get("height").toString());
         put("weight", API.queryURL(link).get("weight").toString());
       }
     };
   }
 
+  /**
+   * Gets base stats of the Pokémon.
+   * @param link The link of the Pokémon to get the stats for.
+   * @return A map of the base stats for the Pokémon.
+   * @throws IOException
+   */
   public static @NotNull HashMap<String, String> getBaseStats(String link) throws IOException {
     JSONArray baseStatObj = API.queryURL(link).getJSONArray("stats");
 
@@ -198,12 +234,17 @@ public class Pokemon {
           } else if (stat.equalsIgnoreCase("hp")) {
             put(stat.toUpperCase(), statObj.get("base_stat").toString());
           } else put(stat, statObj.get("base_stat").toString());
-
         }
       }
     };
   }
 
+  /**
+   * Gets the abilities object from the API of the specified Pokémon.
+   * @param url The url of the Pokémon to get the abilities for.
+   * @return A map of the Pokémon's abilities.
+   * @throws IOException
+   */
   private static @NotNull HashMap<String, String> getAbilitiesObj(String url) throws IOException {
     JSONArray abilitiesObj = API.queryURL(url).getJSONArray("abilities");
 
@@ -220,6 +261,12 @@ public class Pokemon {
     };
   }
 
+  /**
+   * Gets the abilities of the specified Pokémon.
+   * @param url The url of the Pokémon to get the abilities for.
+   * @return A map containing the Pokémon's abilities.
+   * @throws IOException
+   */
   public static @NotNull HashMap<String, String> getAbilities(String url) throws IOException {
     return new HashMap<>() {{
       getAbilitiesObj(url).forEach((key, value) -> {

@@ -22,13 +22,16 @@ import static javafx.scene.layout.GridPane.setValignment;
  */
 public class Card {
   private static Text title;
-  private static double width = 0;
-  private static double height = 0;
   private static Card cardInstance = null;
 
   private Card() {
   }
 
+  /**
+   * Instantiates a new {@link Card}.
+   *
+   * @return An instance of a {@link Card}.
+   */
   public static Card getInstance() {
     if (cardInstance == null)
       cardInstance = new Card();
@@ -36,13 +39,21 @@ public class Card {
     return cardInstance;
   }
 
+  /**
+   * Adds styles to the card.
+   *
+   * @param card   The card to add the styles to.
+   * @param color  The background color of the card.
+   * @param width  The width of the card.
+   * @param height The height of the card.
+   */
   private static void setCardStyle(@NotNull GridPane card, String color, double width, double height) {
     setHalignment(title, HPos.CENTER);
     setValignment(title, VPos.CENTER);
     card.setStyle("-fx-background: " + color + ";"
-        + "-fx-background-color: " + color + ";"
-        +"-fx-background-radius: 30px; "
-        + "-fx-border-radius: 30px;");
+            + "-fx-background-color: " + color + ";"
+            + "-fx-background-radius: 30px; "
+            + "-fx-border-radius: 30px;");
     card.setMinSize(width, height);
     card.setMaxSize(width, height);
     card.setAlignment(Pos.CENTER);
@@ -75,6 +86,8 @@ public class Card {
     ImageView image = new ImageView(Pokemon.getPicture(url));
     title = cardTitle(Pokemon.getName(url), 24);
 
+    double width = 0;
+    double height = 0;
     setCardStyle(card, "#2B72B8", width, height);
     card.add(title, 0, 0);
     card.add(image, 0, 1);

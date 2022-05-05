@@ -4,10 +4,9 @@ module com.example.pokemonviewer {
 
   requires org.controlsfx.controls;
   requires org.kordamp.bootstrapfx.core;
-  requires json;
-  requires gson;
   requires org.jetbrains.annotations;
   requires org.apache.commons.io;
+  requires org.json;
 
   opens com.example.pokemonviewer to javafx.fxml;
   exports com.example.pokemonviewer;

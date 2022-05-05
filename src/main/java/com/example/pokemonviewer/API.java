@@ -28,7 +28,7 @@ public final class API {
   /**
    * Queries the {@link API#BASE_URL} with a search option and id. The id corresponds to the Pokémon.
    * @param searchParam The search option to add onto {@link API#BASE_URL}.
-   * @param id The specific Pokemon to search for.
+   * @param id The specific Pokémon to search for.
    * @return  A {@link JSONObject} of the queried URL.
    * @throws IOException
    */
